@@ -2,6 +2,8 @@ package com.kaiming.weblog.web.controller;
 
 import com.kaiming.weblog.module.common.aspect.ApiOperationLog;
 import com.kaiming.weblog.web.model.User;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -22,11 +24,13 @@ import java.util.stream.Collectors;
  * @Version 1.0
  */
 @RestController
+@Api(tags = "首页模块")
 public class TestController {
 
 
     @PostMapping("/test")
     @ApiOperationLog(description = "测试接口")
+    @ApiOperation(value = "测试接口")
     public ResponseEntity<String> test(@RequestBody @Validated User user, BindingResult bindingResult) {
         // 是否存在校验错误
         if (bindingResult.hasErrors()) {
