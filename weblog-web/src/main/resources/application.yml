@@ -4,6 +4,3 @@ server:
 spring:
   profiles:
     active: dev
-  jackson:
-    default-property-inclusion: non_null
-    date-format: yyyy-MM-dd HH:mm:ss
