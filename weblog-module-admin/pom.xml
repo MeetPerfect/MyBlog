@@ -15,7 +15,16 @@
     <dependencies>
         <dependency>
             <groupId>com.kaiming</groupId>
+            <artifactId>weblog-module-jwt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.kaiming</groupId>
             <artifactId>weblog-module-common</artifactId>
+        </dependency>
+        <!-- Spring Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

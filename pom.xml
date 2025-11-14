@@ -25,6 +25,8 @@
         <!-- 管理后台 -->
         <module>weblog-module-admin</module>
         <module>weblog-module-common</module>
+        <!-- JWT 模块 -->
+        <module>weblog-module-jwt</module>
     </modules>
     
     
@@ -61,6 +63,12 @@
             <dependency>
                 <groupId>com.kaiming</groupId>
                 <artifactId>weblog-module-common</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.kaiming</groupId>
+                <artifactId>weblog-module-jwt</artifactId>
                 <version>${revision}</version>
             </dependency>
             
