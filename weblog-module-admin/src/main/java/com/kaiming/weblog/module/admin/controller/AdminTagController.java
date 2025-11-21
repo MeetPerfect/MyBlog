@@ -45,5 +45,12 @@ public class AdminTagController {
     public PageResponse findTagList(@RequestBody @Validated FindTagPageListReqVO findTagPageListReqVO) {
         return tagService.findTagList(findTagPageListReqVO);
     }
+
+    @PostMapping("/category/delete")
+    @ApiOperation(value = "删除标签")
+    @ApiOperationLog(description = "删除标签")
+    public Response deleteCategory(@RequestBody @Validated DeleteTagReqVO deleteTagReqVO) {
+        return tagService.deleteTag(deleteTagReqVO);
+    }
     
 }

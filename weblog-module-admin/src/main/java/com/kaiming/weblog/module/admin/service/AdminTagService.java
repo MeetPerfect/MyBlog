@@ -30,12 +30,12 @@ public interface AdminTagService {
     PageResponse findTagList(FindTagPageListReqVO findTagPageListReqVO);
 
 
-//    /**
-//     * 删除分类
-//     * @param deleteCategoryReqVO
-//     * @return
-//     */
-//    Response deleteCategory(DeleteCategoryReqVO deleteCategoryReqVO);
+    /**
+     * 删除分类
+     * @param deleteTagReqVO
+     * @return
+     */
+    Response deleteCategory(DeleteTagReqVO deleteTagReqVO);
 //
 //
 //    /**

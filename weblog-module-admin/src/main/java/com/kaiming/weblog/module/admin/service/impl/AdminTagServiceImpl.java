@@ -89,5 +89,16 @@ public class AdminTagServiceImpl extends ServiceImpl<TagMapper, TagDO> implement
         return PageResponse.success(page, vos);
     }
 
-
+    /**
+     * 删除分类
+     *
+     * @param deleteTagReqVO
+     * @return
+     */
+    @Override
+    public Response deleteCategory(DeleteTagReqVO deleteTagReqVO) {
+        Long id = deleteTagReqVO.getId();
+        int count = tagMapper.deleteById(id);
+        return count == 1 ? Response.success() : Response.fail(ResponseCodeEnum.TAG_NOT_EXISTED);
+    }
 }
