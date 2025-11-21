@@ -3,6 +3,7 @@ package com.kaiming.weblog.module.common.domain.mapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.kaiming.weblog.module.common.domain.dos.CategoryDO;
+import com.kaiming.weblog.module.common.domain.dos.TagDO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -15,20 +16,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @Version 1.0
  */
 @Mapper
-public interface CategoryMapper extends BaseMapper<CategoryDO> {
-
-    /**
-     * 根据分类名称查询
-     * @param categoryName
-     * @return
-     */
-    default CategoryDO selectByName(String categoryName) {
-        // 构建查询条件
-        LambdaQueryWrapper<CategoryDO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(CategoryDO::getName, categoryName);
-
-        // 执行查询
-        return selectOne(wrapper);
-    }
+public interface TagMapper extends BaseMapper<TagDO> {
+    
     
 }
