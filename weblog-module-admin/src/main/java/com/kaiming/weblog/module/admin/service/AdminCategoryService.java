@@ -29,7 +29,7 @@ public interface AdminCategoryService {
      * @param findCategoryPageListReqVO
      * @return
      */
-    PageResponse findCategoryList(FindCategoryPageListReqVO findCategoryPageListReqVO);
+    PageResponse findCategoryPageList(FindCategoryPageListReqVO findCategoryPageListReqVO);
 
 
     /**

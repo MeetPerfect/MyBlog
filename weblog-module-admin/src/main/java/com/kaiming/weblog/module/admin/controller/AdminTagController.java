@@ -1,9 +1,6 @@
 package com.kaiming.weblog.module.admin.controller;
 
-import com.kaiming.weblog.module.admin.model.vo.AddCategoryReqVO;
-import com.kaiming.weblog.module.admin.model.vo.AddTagReqVO;
-import com.kaiming.weblog.module.admin.model.vo.DeleteCategoryReqVO;
-import com.kaiming.weblog.module.admin.model.vo.FindCategoryPageListReqVO;
+import com.kaiming.weblog.module.admin.model.vo.*;
 import com.kaiming.weblog.module.admin.service.AdminCategoryService;
 import com.kaiming.weblog.module.admin.service.AdminTagService;
 import com.kaiming.weblog.module.common.aspect.ApiOperationLog;
@@ -38,9 +35,15 @@ public class AdminTagController {
     @PostMapping("/tag/add")
     @ApiOperation(value = "添加标签")
     @ApiOperationLog(description = "添加标签")
-    public Response addCategory(@RequestBody @Validated AddTagReqVO addTagReqVO) {
+    public Response addTag(@RequestBody @Validated AddTagReqVO addTagReqVO) {
         return tagService.addTag(addTagReqVO);
     }
-    
+
+    @PostMapping("/tag/list")
+    @ApiOperation(value = "标签分页数据获取")
+    @ApiOperationLog(description = "标签分页数据获取")
+    public PageResponse findTagList(@RequestBody @Validated FindTagPageListReqVO findTagPageListReqVO) {
+        return tagService.findTagList(findTagPageListReqVO);
+    }
     
 }

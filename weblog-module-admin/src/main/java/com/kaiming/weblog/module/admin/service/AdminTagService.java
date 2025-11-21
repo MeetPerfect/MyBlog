@@ -1,9 +1,6 @@
 package com.kaiming.weblog.module.admin.service;
 
-import com.kaiming.weblog.module.admin.model.vo.AddCategoryReqVO;
-import com.kaiming.weblog.module.admin.model.vo.AddTagReqVO;
-import com.kaiming.weblog.module.admin.model.vo.DeleteCategoryReqVO;
-import com.kaiming.weblog.module.admin.model.vo.FindCategoryPageListReqVO;
+import com.kaiming.weblog.module.admin.model.vo.*;
 import com.kaiming.weblog.module.common.utils.PageResponse;
 import com.kaiming.weblog.module.common.utils.Response;
 
@@ -27,12 +24,12 @@ public interface AdminTagService {
 
     /**
      * 分类分页数据查询
-     * @param findCategoryPageListReqVO
+     * @param findTagPageListReqVO
      * @return
      */
-//    PageResponse findCategoryList(FindCategoryPageListReqVO findCategoryPageListReqVO);
-//
-//
+    PageResponse findTagList(FindTagPageListReqVO findTagPageListReqVO);
+
+
 //    /**
 //     * 删除分类
 //     * @param deleteCategoryReqVO

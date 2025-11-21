@@ -2,9 +2,14 @@ package com.kaiming.weblog.module.common.domain.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kaiming.weblog.module.common.domain.dos.CategoryDO;
 import com.kaiming.weblog.module.common.domain.dos.TagDO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * ClassName: CategoryMapper
@@ -17,6 +22,26 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface TagMapper extends BaseMapper<TagDO> {
-    
-    
+
+    /**
+     * 根据标签名称查询
+     *
+     * @param current
+     * @param size
+     * @param name
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    default Page<TagDO> selectPageList(Long current, Long size, String name, LocalDate startTime, LocalDate endTime) {
+        Page<TagDO> page = new Page<>(current, size);
+
+        LambdaQueryWrapper<TagDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(Objects.nonNull(name), TagDO::getName, name)
+                .ge(Objects.nonNull(startTime), TagDO::getCreateTime, startTime)
+                .le(Objects.nonNull(endTime), TagDO::getCreateTime, endTime)
+                .orderByDesc(TagDO::getCreateTime);
+
+        return selectPage(page, wrapper);
+    }
 }

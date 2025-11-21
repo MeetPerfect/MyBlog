@@ -39,10 +39,10 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class AdminTagServiceImpl extends ServiceImpl<TagMapper, TagDO> implements AdminTagService {
-    
+
     @Autowired
     private TagMapper tagMapper;
-    
+
     @Override
     public Response addTag(AddTagReqVO addTagReqVO) {
         List<TagDO> tagDOS = addTagReqVO.getTags().stream()
@@ -61,16 +61,33 @@ public class AdminTagServiceImpl extends ServiceImpl<TagMapper, TagDO> implement
         return Response.success();
     }
 
-//    @Override
-//    public PageResponse findCategoryList(FindCategoryPageListReqVO findCategoryPageListReqVO) {
-//    }
-//
-//    @Override
-//    public Response deleteCategory(DeleteCategoryReqVO deleteCategoryReqVO) {
-//    }
-//
-//    @Override
-//    public Response findCategorySelectList() {
-//        
-//    }
+    @Override
+    public PageResponse findTagList(FindTagPageListReqVO findTagPageListReqVO) {
+        Long current = findTagPageListReqVO.getCurrent();
+        Long size = findTagPageListReqVO.getSize();
+
+        String name = findTagPageListReqVO.getName();
+        LocalDate startDate = findTagPageListReqVO.getStartDate();
+        LocalDate endDate = findTagPageListReqVO.getEndDate();
+
+        // 分页查询
+        Page<TagDO> page = tagMapper.selectPageList(current, size, name, startDate, endDate);
+
+        List<TagDO> records = page.getRecords();
+
+        List<FindTagPageListRspVO> vos = null;
+
+//        转vo
+        if (!CollectionUtils.isEmpty(records)) {
+            vos = records.stream().map(tagDO -> FindTagPageListRspVO.builder()
+                            .id(tagDO.getId())
+                            .name(tagDO.getName())
+                            .createTime(tagDO.getCreateTime())
+                            .build())
+                    .collect(Collectors.toList());
+        }
+        return PageResponse.success(page, vos);
+    }
+
+
 }
