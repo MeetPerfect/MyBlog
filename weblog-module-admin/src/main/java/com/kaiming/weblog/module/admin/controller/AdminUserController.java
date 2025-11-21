@@ -35,4 +35,11 @@ public class AdminUserController {
     public Response updatePassword(@RequestBody @Validated UpdateAdminUserPasswordReqVO updateAdminUserPasswordReqVO) {
         return adminUserService.updatePassword(updateAdminUserPasswordReqVO);
     }
+
+    @PostMapping("/user/info")
+    @ApiOperation(value = "获取用户信息")
+    @ApiOperationLog(description = "获取用户信息")
+    public Response findUserInfo() {
+        return adminUserService.findUserInfo();
+    }
 }

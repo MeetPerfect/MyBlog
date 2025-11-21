@@ -20,4 +20,10 @@ public interface AdminUserService {
      * @return
      */
     Response updatePassword(UpdateAdminUserPasswordReqVO updateAdminUserPasswordReqVO);
+
+    /**
+     * 获取当前登录用户信息
+     * @return
+     */
+    Response findUserInfo();
 }
