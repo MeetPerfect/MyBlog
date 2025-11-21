@@ -1,6 +1,7 @@
 package com.kaiming.weblog.module.admin.service;
 
 import com.kaiming.weblog.module.admin.model.vo.AddCategoryReqVO;
+import com.kaiming.weblog.module.admin.model.vo.DeleteCategoryReqVO;
 import com.kaiming.weblog.module.admin.model.vo.FindCategoryPageListReqVO;
 import com.kaiming.weblog.module.common.utils.PageResponse;
 import com.kaiming.weblog.module.common.utils.Response;
@@ -29,4 +30,12 @@ public interface AdminCategoryService {
      * @return
      */
     PageResponse findCategoryList(FindCategoryPageListReqVO findCategoryPageListReqVO);
+
+
+    /**
+     * 删除分类
+     * @param deleteCategoryReqVO
+     * @return
+     */
+    Response deleteCategory(DeleteCategoryReqVO deleteCategoryReqVO);
 }
