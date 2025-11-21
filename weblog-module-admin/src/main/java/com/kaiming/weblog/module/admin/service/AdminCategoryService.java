@@ -1,6 +1,8 @@
 package com.kaiming.weblog.module.admin.service;
 
 import com.kaiming.weblog.module.admin.model.vo.AddCategoryReqVO;
+import com.kaiming.weblog.module.admin.model.vo.FindCategoryPageListReqVO;
+import com.kaiming.weblog.module.common.utils.PageResponse;
 import com.kaiming.weblog.module.common.utils.Response;
 
 /**
@@ -20,4 +22,11 @@ public interface AdminCategoryService {
      * @return
      */
     Response addCategory(AddCategoryReqVO addCategoryReqVO);
+
+    /**
+     * 分类分页数据查询
+     * @param findCategoryPageListReqVO
+     * @return
+     */
+    PageResponse findCategoryList(FindCategoryPageListReqVO findCategoryPageListReqVO);
 }
