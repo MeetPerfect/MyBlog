@@ -9,6 +9,7 @@ import com.kaiming.weblog.module.admin.model.vo.FindCategoryPageListRspVO;
 import com.kaiming.weblog.module.admin.service.AdminCategoryService;
 import com.kaiming.weblog.module.common.domain.dos.CategoryDO;
 import com.kaiming.weblog.module.common.domain.mapper.CategoryMapper;
+import com.kaiming.weblog.module.common.domain.vo.SelectRspVO;
 import com.kaiming.weblog.module.common.enums.ResponseCodeEnum;
 import com.kaiming.weblog.module.common.exception.BizException;
 import com.kaiming.weblog.module.common.utils.PageResponse;
@@ -111,5 +112,23 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         categoryMapper.deleteById(categoryId);
 
         return Response.success();
+    }
+
+    @Override
+    public Response findCategorySelectList() {
+        List<CategoryDO> categoryDOS = categoryMapper.selectList(null);
+
+        // DO 转 VO
+        List<SelectRspVO> selectRspVOS = null;
+
+        if (!CollectionUtils.isEmpty(categoryDOS)) {
+            selectRspVOS = categoryDOS.stream()
+                    .map(categoryDO -> SelectRspVO.builder()
+                            .label(categoryDO.getName())
+                            .value(categoryDO.getId())
+                            .build()).collect(Collectors.toList());
+        }
+        
+        return Response.success(selectRspVOS);
     }
 }
