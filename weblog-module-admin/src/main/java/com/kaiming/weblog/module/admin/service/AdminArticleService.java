@@ -1,9 +1,6 @@
 package com.kaiming.weblog.module.admin.service;
 
-import com.kaiming.weblog.module.admin.model.vo.DeleteArticleReqVO;
-import com.kaiming.weblog.module.admin.model.vo.FindArticleDetailReqVO;
-import com.kaiming.weblog.module.admin.model.vo.FindArticlePageListReqVO;
-import com.kaiming.weblog.module.admin.model.vo.PublishArticleReqVO;
+import com.kaiming.weblog.module.admin.model.vo.*;
 import com.kaiming.weblog.module.common.utils.Response;
 
 /**
@@ -48,4 +45,11 @@ public interface AdminArticleService {
      * @return
      */
     Response findArticleDetail(FindArticleDetailReqVO findArticleDetailReqVO);
+
+    /**
+     * 更新文章
+     * @param updateArticleReqVO
+     * @return
+     */
+    Response updateArticle(UpdateArticleReqVO updateArticleReqVO);
 }

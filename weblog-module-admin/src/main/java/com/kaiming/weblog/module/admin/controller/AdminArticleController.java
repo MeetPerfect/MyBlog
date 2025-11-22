@@ -1,9 +1,6 @@
 package com.kaiming.weblog.module.admin.controller;
 
-import com.kaiming.weblog.module.admin.model.vo.DeleteArticleReqVO;
-import com.kaiming.weblog.module.admin.model.vo.FindArticleDetailReqVO;
-import com.kaiming.weblog.module.admin.model.vo.FindArticlePageListReqVO;
-import com.kaiming.weblog.module.admin.model.vo.PublishArticleReqVO;
+import com.kaiming.weblog.module.admin.model.vo.*;
 import com.kaiming.weblog.module.admin.service.AdminArticleService;
 import com.kaiming.weblog.module.common.aspect.ApiOperationLog;
 import com.kaiming.weblog.module.common.utils.Response;
@@ -62,5 +59,13 @@ public class AdminArticleController {
     @ApiOperationLog(description = "查询文章详情")
     public Response findArticleDetail(@RequestBody @Validated FindArticleDetailReqVO findArticlePageListReqVO) {
         return articleService.findArticleDetail(findArticlePageListReqVO);
+    }
+
+    @PostMapping("/update")
+    @ApiOperation(value = "更新文章")
+    @ApiOperationLog(description = "更新文章")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Response updateArticle(@RequestBody @Validated UpdateArticleReqVO updateArticleReqVO) {
+        return articleService.updateArticle(updateArticleReqVO);
     }
 }
