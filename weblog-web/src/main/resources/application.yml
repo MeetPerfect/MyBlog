@@ -4,7 +4,12 @@ server:
 spring:
   profiles:
     active: dev
-    
+  
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 jwt:
   # 签发人
   issuer: quanxiaoha
