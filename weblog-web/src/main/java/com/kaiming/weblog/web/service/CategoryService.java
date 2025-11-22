@@ -1,6 +1,7 @@
 package com.kaiming.weblog.web.service;
 
 import com.kaiming.weblog.module.common.utils.Response;
+import com.kaiming.weblog.web.model.vo.FindCategoryArticlePageListReqVO;
 
 /**
  * ClassName: CategoryService
@@ -18,4 +19,7 @@ public interface CategoryService {
      * @return
      */
     Response findCategoryList();
+    
+    
+    Response findCategoryArticlePageList(FindCategoryArticlePageListReqVO findCategoryArticlePageListReqVO);
 }

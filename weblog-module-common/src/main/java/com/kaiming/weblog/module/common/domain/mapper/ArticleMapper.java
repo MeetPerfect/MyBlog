@@ -7,8 +7,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kaiming.weblog.module.common.domain.dos.ArticleContentDO;
 import com.kaiming.weblog.module.common.domain.dos.ArticleDO;
+import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -42,6 +44,23 @@ public interface ArticleMapper extends BaseMapper<ArticleDO> {
                 .le(Objects.nonNull(endDate), ArticleDO::getCreateTime, endDate)  // 小于等于 endDate
                 .orderByDesc(ArticleDO::getCreateTime); // 按创建时间倒叙
 
+        return selectPage(page, wrapper);
+    }
+
+    /**
+     * 根据文章ID列表分页查询文章列表
+     * @param current
+     * @param size
+     * @param articleIds
+     * @return
+     */
+    default Page<ArticleDO> selectPageListByArticleId(Long current, Long size, List<Long> articleIds) {
+        Page<ArticleDO> page = new Page<>();
+        
+        LambdaQueryWrapper<ArticleDO> wrapper = Wrappers.<ArticleDO>lambdaQuery()
+                .in(ArticleDO::getId, articleIds)
+                .orderByDesc(ArticleDO::getCreateTime);
+        
         return selectPage(page, wrapper);
     }
 }

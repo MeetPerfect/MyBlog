@@ -20,6 +20,7 @@ public interface ArticleCategoryRelMapper extends BaseMapper<ArticleCategoryRelD
 
     /**
      * 根据文章 ID 删除关联记录
+     *
      * @param articleId
      * @return
      */
@@ -30,6 +31,7 @@ public interface ArticleCategoryRelMapper extends BaseMapper<ArticleCategoryRelD
 
     /**
      * 根据文章 ID 查询关联记录
+     *
      * @param articleId
      * @return
      */
@@ -40,6 +42,7 @@ public interface ArticleCategoryRelMapper extends BaseMapper<ArticleCategoryRelD
 
     /**
      * 根据分类 ID 查询
+     *
      * @param categoryId
      * @return
      */
@@ -52,11 +55,23 @@ public interface ArticleCategoryRelMapper extends BaseMapper<ArticleCategoryRelD
 
     /**
      * 根据文章 IDs 查询关联记录
+     *
      * @param articleIds
      * @return
      */
     default List<ArticleCategoryRelDO> selectByArticleIds(List<Long> articleIds) {
         return selectList(Wrappers.<ArticleCategoryRelDO>lambdaQuery()
                 .in(ArticleCategoryRelDO::getArticleId, articleIds));
+    }
+
+    /**
+     * 根据分类 ID 查询关联记录列表
+     *
+     * @return
+     */
+    default List<ArticleCategoryRelDO> selectListByCategoryId(Long categoryId) {
+        
+        return selectList(Wrappers.<ArticleCategoryRelDO>lambdaQuery()
+                .eq(ArticleCategoryRelDO::getArticleId, categoryId));
     }
 }
