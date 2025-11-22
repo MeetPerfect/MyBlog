@@ -5,10 +5,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kaiming.weblog.module.admin.model.vo.*;
 import com.kaiming.weblog.module.admin.service.AdminTagService;
+import com.kaiming.weblog.module.common.domain.dos.ArticleTagRelDO;
 import com.kaiming.weblog.module.common.domain.dos.TagDO;
+import com.kaiming.weblog.module.common.domain.mapper.ArticleTagRelMapper;
 import com.kaiming.weblog.module.common.domain.mapper.TagMapper;
 import com.kaiming.weblog.module.common.domain.vo.SelectRspVO;
 import com.kaiming.weblog.module.common.enums.ResponseCodeEnum;
+import com.kaiming.weblog.module.common.exception.BizException;
 import com.kaiming.weblog.module.common.utils.PageResponse;
 import com.kaiming.weblog.module.common.utils.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +40,8 @@ public class AdminTagServiceImpl extends ServiceImpl<TagMapper, TagDO> implement
 
     @Autowired
     private TagMapper tagMapper;
+    @Autowired
+    private ArticleTagRelMapper articleTagRelMapper;
 
     @Override
     public Response addTag(AddTagReqVO addTagReqVO) {
@@ -93,6 +98,14 @@ public class AdminTagServiceImpl extends ServiceImpl<TagMapper, TagDO> implement
     @Override
     public Response deleteTag(DeleteTagReqVO deleteTagReqVO) {
         Long id = deleteTagReqVO.getId();
+
+        ArticleTagRelDO articleTagRelDO = articleTagRelMapper.selectOneByTagId(id);
+
+        if (Objects.nonNull(articleTagRelDO)) {
+            log.warn("==> 此标签下包含文章，无法删除，tagId: {}", id);
+            throw new BizException(ResponseCodeEnum.TAG_CAN_NOT_DELETE);
+        }
+
         int count = tagMapper.deleteById(id);
         return count == 1 ? Response.success() : Response.fail(ResponseCodeEnum.TAG_NOT_EXISTED);
     }

@@ -35,4 +35,16 @@ public interface ArticleCategoryRelMapper extends BaseMapper<ArticleCategoryRelD
         return selectOne(Wrappers.<ArticleCategoryRelDO>lambdaQuery()
                 .eq(ArticleCategoryRelDO::getArticleId, articleId));
     }
+
+    /**
+     * 根据分类 ID 查询
+     * @param categoryId
+     * @return
+     */
+    default ArticleCategoryRelDO selectOneByCategoryId(Long categoryId) {
+        // TODO 多个文章关联一个分类，数据库表中可以添加唯一索引
+        return selectOne(Wrappers.<ArticleCategoryRelDO>lambdaQuery()
+                .eq(ArticleCategoryRelDO::getCategoryId, categoryId)
+                .last("LIMIT 1"));
+    }
 }

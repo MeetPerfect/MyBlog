@@ -7,7 +7,9 @@ import com.kaiming.weblog.module.admin.model.vo.DeleteCategoryReqVO;
 import com.kaiming.weblog.module.admin.model.vo.FindCategoryPageListReqVO;
 import com.kaiming.weblog.module.admin.model.vo.FindCategoryPageListRspVO;
 import com.kaiming.weblog.module.admin.service.AdminCategoryService;
+import com.kaiming.weblog.module.common.domain.dos.ArticleCategoryRelDO;
 import com.kaiming.weblog.module.common.domain.dos.CategoryDO;
+import com.kaiming.weblog.module.common.domain.mapper.ArticleCategoryRelMapper;
 import com.kaiming.weblog.module.common.domain.mapper.CategoryMapper;
 import com.kaiming.weblog.module.common.domain.vo.SelectRspVO;
 import com.kaiming.weblog.module.common.enums.ResponseCodeEnum;
@@ -40,6 +42,8 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     
     @Autowired
     private CategoryMapper categoryMapper;
+    @Autowired
+    private ArticleCategoryRelMapper articleCategoryRelMapper;
     
     @Override
     public Response addCategory(AddCategoryReqVO addCategoryReqVO) {
@@ -96,7 +100,15 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     public Response deleteCategory(DeleteCategoryReqVO deleteCategoryReqVO) {
         // 分类 ID
         Long categoryId = deleteCategoryReqVO.getId();
+        
+        // 判断分类下是否存在文章
+        ArticleCategoryRelDO articleCategoryRelDO = articleCategoryRelMapper.selectOneByCategoryId(categoryId);
 
+        if (Objects.nonNull(articleCategoryRelDO)) {
+            log.warn("==> 此分类下包含文章，无法删除，categoryId: {}", categoryId);
+            throw new BizException(ResponseCodeEnum.CATEGORY_CAN_NOT_DELETE);
+        }
+        
         // 删除分类
         categoryMapper.deleteById(categoryId);
 
