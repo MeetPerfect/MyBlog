@@ -1,22 +1,17 @@
 package com.kaiming.weblog.module.admin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kaiming.weblog.module.admin.model.vo.*;
-import com.kaiming.weblog.module.admin.service.AdminCategoryService;
 import com.kaiming.weblog.module.admin.service.AdminTagService;
-import com.kaiming.weblog.module.common.domain.dos.CategoryDO;
 import com.kaiming.weblog.module.common.domain.dos.TagDO;
-import com.kaiming.weblog.module.common.domain.mapper.CategoryMapper;
 import com.kaiming.weblog.module.common.domain.mapper.TagMapper;
 import com.kaiming.weblog.module.common.domain.vo.SelectRspVO;
 import com.kaiming.weblog.module.common.enums.ResponseCodeEnum;
-import com.kaiming.weblog.module.common.exception.BizException;
 import com.kaiming.weblog.module.common.utils.PageResponse;
 import com.kaiming.weblog.module.common.utils.Response;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -104,6 +99,7 @@ public class AdminTagServiceImpl extends ServiceImpl<TagMapper, TagDO> implement
 
     /**
      * 标签 Select 下拉列表数据获取
+     *
      * @param searchTagReqVO
      * @return
      */
@@ -112,7 +108,7 @@ public class AdminTagServiceImpl extends ServiceImpl<TagMapper, TagDO> implement
         String key = searchTagReqVO.getKey();
 
         List<TagDO> tagDOS = tagMapper.selectByKey(key);
-        
+
         List<SelectRspVO> vos = null;
         if (!CollectionUtils.isEmpty(tagDOS)) {
             vos = tagDOS.stream()
@@ -121,6 +117,27 @@ public class AdminTagServiceImpl extends ServiceImpl<TagMapper, TagDO> implement
                             .value(Objects.toString(tagDO.getId()))
                             .build())
                     .collect(Collectors.toList());
+        }
+        return Response.success(vos);
+    }
+
+    /**
+     * 查询标签 Select 列表数据
+     *
+     * @return
+     */
+    @Override
+    public Response findTagSelectList() {
+        List<TagDO> tagDOS = tagMapper.selectList(Wrappers.emptyWrapper());
+
+        List<SelectRspVO> vos = null;
+
+        if (!CollectionUtils.isEmpty(tagDOS)) {
+            vos = tagDOS.stream()
+                    .map(tagDO -> SelectRspVO.builder()
+                            .label(tagDO.getName())
+                            .value(Objects.toString(tagDO.getId()))
+                            .build()).collect(Collectors.toList());
         }
         return Response.success(vos);
     }
