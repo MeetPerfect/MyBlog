@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.kaiming.weblog.module.common.domain.dos.ArticleCategoryRelDO;
 import com.kaiming.weblog.module.common.domain.dos.ArticleContentDO;
 
+import java.util.List;
+
 /**
  * ClassName: ArticleMapper
  * Package: com.kaiming.weblog.module.common.domain.mapper
@@ -46,5 +48,15 @@ public interface ArticleCategoryRelMapper extends BaseMapper<ArticleCategoryRelD
         return selectOne(Wrappers.<ArticleCategoryRelDO>lambdaQuery()
                 .eq(ArticleCategoryRelDO::getCategoryId, categoryId)
                 .last("LIMIT 1"));
+    }
+
+    /**
+     * 根据文章 IDs 查询关联记录
+     * @param articleIds
+     * @return
+     */
+    default List<ArticleCategoryRelDO> selectByArticleIds(List<Long> articleIds) {
+        return selectList(Wrappers.<ArticleCategoryRelDO>lambdaQuery()
+                .in(ArticleCategoryRelDO::getArticleId, articleIds));
     }
 }

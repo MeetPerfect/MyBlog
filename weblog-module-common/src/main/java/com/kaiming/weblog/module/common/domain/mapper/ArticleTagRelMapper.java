@@ -21,6 +21,7 @@ public interface ArticleTagRelMapper extends InsertBatchMapper<ArticleTagRelDO> 
 
     /**
      * 根据文章 ID 删除关联记录
+     *
      * @param articleId
      * @return
      */
@@ -31,6 +32,7 @@ public interface ArticleTagRelMapper extends InsertBatchMapper<ArticleTagRelDO> 
 
     /**
      * 根据文章 ID 来查询
+     *
      * @param articleId
      * @return
      */
@@ -42,6 +44,7 @@ public interface ArticleTagRelMapper extends InsertBatchMapper<ArticleTagRelDO> 
 
     /**
      * 根据标签 ID 查询
+     *
      * @param tagId
      * @return
      */
@@ -49,5 +52,16 @@ public interface ArticleTagRelMapper extends InsertBatchMapper<ArticleTagRelDO> 
         return selectOne(Wrappers.<ArticleTagRelDO>lambdaQuery()
                 .eq(ArticleTagRelDO::getTagId, tagId)
                 .last("LIMIT 1"));
+    }
+
+    /**
+     * 根据文章 IDs 查询关联记录
+     *
+     * @param articleIds
+     * @return
+     */
+    default List<ArticleTagRelDO> selectByArticleIds(List<Long> articleIds) {
+        return selectList(Wrappers.<ArticleTagRelDO>lambdaQuery()
+                .in(ArticleTagRelDO::getArticleId, articleIds));
     }
 }
