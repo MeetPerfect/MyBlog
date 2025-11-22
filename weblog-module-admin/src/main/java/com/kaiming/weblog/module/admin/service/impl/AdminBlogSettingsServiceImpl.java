@@ -2,12 +2,14 @@ package com.kaiming.weblog.module.admin.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kaiming.weblog.module.admin.convert.BlogSettingsConvert;
+import com.kaiming.weblog.module.admin.model.vo.FindBlogSettingsRspVO;
 import com.kaiming.weblog.module.admin.model.vo.UpdateBlogSettingsReqVO;
 import com.kaiming.weblog.module.admin.service.AdminBlogSettingsService;
 import com.kaiming.weblog.module.common.domain.dos.BlogSettingsDO;
 import com.kaiming.weblog.module.common.domain.mapper.BlogSettingsMapper;
 import com.kaiming.weblog.module.common.utils.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,6 +24,9 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class AdminBlogSettingsServiceImpl extends ServiceImpl<BlogSettingsMapper, BlogSettingsDO> implements AdminBlogSettingsService {
+
+    @Autowired
+    private BlogSettingsMapper blogSettingsMapper;
 
     @Override
     public Response updateBlogSettings(UpdateBlogSettingsReqVO updateBlogSettingsReqVO) {
@@ -46,5 +51,18 @@ public class AdminBlogSettingsServiceImpl extends ServiceImpl<BlogSettingsMapper
         return Response.success();
         
     }
-    
+
+    /**
+     * 获取博客设置详情
+     * @return
+     */
+    @Override
+    public Response findDetail() {
+        // 查询 ID 为 1 的记录
+        BlogSettingsDO blogSettingsDO = blogSettingsMapper.selectById(1L);
+
+        FindBlogSettingsRspVO findBlogSettingsRspVO = BlogSettingsConvert.INSTANCE.convertDO2VO(blogSettingsDO);
+        return Response.success(findBlogSettingsRspVO);
+    }
+
 }

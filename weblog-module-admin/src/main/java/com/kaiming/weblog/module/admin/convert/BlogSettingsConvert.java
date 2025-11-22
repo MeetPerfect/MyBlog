@@ -1,5 +1,6 @@
 package com.kaiming.weblog.module.admin.convert;
 
+import com.kaiming.weblog.module.admin.model.vo.FindBlogSettingsRspVO;
 import com.kaiming.weblog.module.admin.model.vo.UpdateBlogSettingsReqVO;
 import com.kaiming.weblog.module.common.domain.dos.BlogSettingsDO;
 import org.mapstruct.Mapper;
@@ -28,4 +29,11 @@ public interface BlogSettingsConvert {
      * @return
      */
     BlogSettingsDO convertVO2DO(UpdateBlogSettingsReqVO bean);
+
+    /**
+     * 将 DO 转化为 VO
+     * @param bean
+     * @return
+     */
+    FindBlogSettingsRspVO convertDO2VO(BlogSettingsDO bean);
 }
