@@ -20,7 +20,16 @@ import java.util.Objects;
  * @Version 1.0
  */
 public interface ArticleMapper extends BaseMapper<ArticleDO> {
-    
+
+    /**
+     * 分页查询文章列表
+     * @param current
+     * @param size
+     * @param title
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     default Page<ArticleDO> selectPageList(Long current, Long size, String title, LocalDate startDate, LocalDate endDate) {
         
         Page<ArticleDO> page = new Page<>(current, size);
@@ -33,6 +42,5 @@ public interface ArticleMapper extends BaseMapper<ArticleDO> {
                 .orderByDesc(ArticleDO::getCreateTime); // 按创建时间倒叙
 
         return selectPage(page, wrapper);
-        
     }
 }

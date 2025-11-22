@@ -1,6 +1,7 @@
 package com.kaiming.weblog.module.admin.controller;
 
 import com.kaiming.weblog.module.admin.model.vo.DeleteArticleReqVO;
+import com.kaiming.weblog.module.admin.model.vo.FindArticleDetailReqVO;
 import com.kaiming.weblog.module.admin.model.vo.FindArticlePageListReqVO;
 import com.kaiming.weblog.module.admin.model.vo.PublishArticleReqVO;
 import com.kaiming.weblog.module.admin.service.AdminArticleService;
@@ -54,5 +55,12 @@ public class AdminArticleController {
     @ApiOperationLog(description = "查询文章分页数据")
     public Response findArticlePageList(@RequestBody @Validated FindArticlePageListReqVO findArticlePageListReqVO) {
         return articleService.findArticlePageList(findArticlePageListReqVO);
+    }
+
+    @PostMapping("/detail")
+    @ApiOperation(value = "查询文章详情")
+    @ApiOperationLog(description = "查询文章详情")
+    public Response findArticleDetail(@RequestBody @Validated FindArticleDetailReqVO findArticlePageListReqVO) {
+        return articleService.findArticleDetail(findArticlePageListReqVO);
     }
 }

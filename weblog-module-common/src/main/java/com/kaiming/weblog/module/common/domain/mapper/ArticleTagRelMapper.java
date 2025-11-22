@@ -6,6 +6,8 @@ import com.kaiming.weblog.module.common.config.InsertBatchMapper;
 import com.kaiming.weblog.module.common.domain.dos.ArticleCategoryRelDO;
 import com.kaiming.weblog.module.common.domain.dos.ArticleTagRelDO;
 
+import java.util.List;
+
 /**
  * ClassName: ArticleMapper
  * Package: com.kaiming.weblog.module.common.domain.mapper
@@ -24,6 +26,16 @@ public interface ArticleTagRelMapper extends InsertBatchMapper<ArticleTagRelDO> 
      */
     default int deleteByArticleId(Long articleId) {
         return delete(Wrappers.<ArticleTagRelDO>lambdaQuery()
+                .eq(ArticleTagRelDO::getArticleId, articleId));
+    }
+
+    /**
+     * 根据文章 ID 来查询
+     * @param articleId
+     * @return
+     */
+    default List<ArticleTagRelDO> selectByArticleId(Long articleId) {
+        return selectList(Wrappers.<ArticleTagRelDO>lambdaQuery()
                 .eq(ArticleTagRelDO::getArticleId, articleId));
     }
 }

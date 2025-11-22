@@ -1,6 +1,7 @@
 package com.kaiming.weblog.module.admin.service;
 
 import com.kaiming.weblog.module.admin.model.vo.DeleteArticleReqVO;
+import com.kaiming.weblog.module.admin.model.vo.FindArticleDetailReqVO;
 import com.kaiming.weblog.module.admin.model.vo.FindArticlePageListReqVO;
 import com.kaiming.weblog.module.admin.model.vo.PublishArticleReqVO;
 import com.kaiming.weblog.module.common.utils.Response;
@@ -18,6 +19,7 @@ public interface AdminArticleService {
 
     /**
      * 发布文章
+     *
      * @param publishArticleReqVO
      * @return
      */
@@ -25,6 +27,7 @@ public interface AdminArticleService {
 
     /**
      * 删除文章
+     *
      * @param deleteArticleReqVO
      * @return
      */
@@ -32,8 +35,17 @@ public interface AdminArticleService {
 
     /**
      * 查询文章分页数据
+     *
      * @param findArticlePageListReqVO
      * @return
      */
     Response findArticlePageList(FindArticlePageListReqVO findArticlePageListReqVO);
+
+    /**
+     * 查询文章详情
+     *
+     * @param findArticleDetailReqVO
+     * @return
+     */
+    Response findArticleDetail(FindArticleDetailReqVO findArticleDetailReqVO);
 }
