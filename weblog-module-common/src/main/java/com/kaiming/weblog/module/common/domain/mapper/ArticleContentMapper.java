@@ -1,8 +1,8 @@
 package com.kaiming.weblog.module.common.domain.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.kaiming.weblog.module.common.domain.dos.ArticleContentDO;
-import com.kaiming.weblog.module.common.domain.dos.ArticleDO;
 
 /**
  * ClassName: ArticleMapper
@@ -14,6 +14,14 @@ import com.kaiming.weblog.module.common.domain.dos.ArticleDO;
  * @Version 1.0
  */
 public interface ArticleContentMapper extends BaseMapper<ArticleContentDO> {
-    
-    
+
+    /**
+     * 根据文章ID删除文章内容
+     * @param id
+     * @return
+     */
+    default int deleteByArticleId(Long id) {
+        return delete(Wrappers.<ArticleContentDO>lambdaQuery()
+                .eq(ArticleContentDO::getArticleId, id));
+    }
 }

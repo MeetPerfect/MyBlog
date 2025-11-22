@@ -1,6 +1,7 @@
 package com.kaiming.weblog.module.admin.service.impl;
 
 import com.google.common.collect.Lists;
+import com.kaiming.weblog.module.admin.model.vo.DeleteArticleReqVO;
 import com.kaiming.weblog.module.admin.model.vo.PublishArticleReqVO;
 import com.kaiming.weblog.module.admin.service.AdminArticleService;
 import com.kaiming.weblog.module.common.domain.dos.*;
@@ -94,6 +95,29 @@ public class AdminArticleServiceImpl implements AdminArticleService {
         List<String> tags = publishArticleReqVO.getTags();
 
         insertTags(articleId, tags);
+
+        return Response.success();
+    }
+
+    /**
+     * 删除文章
+     * @param deleteArticleReqVO
+     * @return
+     */
+    @Override
+    public Response deleteArticle(DeleteArticleReqVO deleteArticleReqVO) {
+        Long articleId = deleteArticleReqVO.getId();
+        // 1. 删除文章
+        articleMapper.deleteById(articleId);
+
+        // 2. 删除文章内容
+        articleContentMapper.deleteByArticleId(articleId);
+
+        // 3. 删除文章-分类关联记录
+        articleCategoryRelMapper.deleteByArticleId(articleId);
+
+        // 4. 删除文章-标签关联记录
+        articleTagRelMapper.deleteByArticleId(articleId);
 
         return Response.success();
     }

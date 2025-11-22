@@ -1,6 +1,7 @@
 package com.kaiming.weblog.module.common.domain.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.kaiming.weblog.module.common.config.InsertBatchMapper;
 import com.kaiming.weblog.module.common.domain.dos.ArticleCategoryRelDO;
 import com.kaiming.weblog.module.common.domain.dos.ArticleTagRelDO;
@@ -15,6 +16,14 @@ import com.kaiming.weblog.module.common.domain.dos.ArticleTagRelDO;
  * @Version 1.0
  */
 public interface ArticleTagRelMapper extends InsertBatchMapper<ArticleTagRelDO> {
-    
-    
+
+    /**
+     * 根据文章 ID 删除关联记录
+     * @param articleId
+     * @return
+     */
+    default int deleteByArticleId(Long articleId) {
+        return delete(Wrappers.<ArticleTagRelDO>lambdaQuery()
+                .eq(ArticleTagRelDO::getArticleId, articleId));
+    }
 }
