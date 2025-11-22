@@ -1,6 +1,7 @@
 package com.kaiming.weblog.module.admin.service;
 
 import com.kaiming.weblog.module.admin.model.vo.DeleteArticleReqVO;
+import com.kaiming.weblog.module.admin.model.vo.FindArticlePageListReqVO;
 import com.kaiming.weblog.module.admin.model.vo.PublishArticleReqVO;
 import com.kaiming.weblog.module.common.utils.Response;
 
@@ -28,4 +29,11 @@ public interface AdminArticleService {
      * @return
      */
     Response deleteArticle(DeleteArticleReqVO deleteArticleReqVO);
+
+    /**
+     * 查询文章分页数据
+     * @param findArticlePageListReqVO
+     * @return
+     */
+    Response findArticlePageList(FindArticlePageListReqVO findArticlePageListReqVO);
 }

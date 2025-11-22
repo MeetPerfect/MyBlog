@@ -1,13 +1,17 @@
 package com.kaiming.weblog.module.admin.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.kaiming.weblog.module.admin.model.vo.DeleteArticleReqVO;
+import com.kaiming.weblog.module.admin.model.vo.FindArticlePageListReqVO;
+import com.kaiming.weblog.module.admin.model.vo.FindArticlePageListRspVO;
 import com.kaiming.weblog.module.admin.model.vo.PublishArticleReqVO;
 import com.kaiming.weblog.module.admin.service.AdminArticleService;
 import com.kaiming.weblog.module.common.domain.dos.*;
 import com.kaiming.weblog.module.common.domain.mapper.*;
 import com.kaiming.weblog.module.common.enums.ResponseCodeEnum;
 import com.kaiming.weblog.module.common.exception.BizException;
+import com.kaiming.weblog.module.common.utils.PageResponse;
 import com.kaiming.weblog.module.common.utils.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
@@ -89,7 +94,7 @@ public class AdminArticleServiceImpl implements AdminArticleService {
                 .articleId(articleId)
                 .categoryId(categoryId)
                 .build();
-        
+
         articleCategoryRelMapper.insert(articleCategoryRelDO);
 
         List<String> tags = publishArticleReqVO.getTags();
@@ -101,6 +106,7 @@ public class AdminArticleServiceImpl implements AdminArticleService {
 
     /**
      * 删除文章
+     *
      * @param deleteArticleReqVO
      * @return
      */
@@ -123,20 +129,54 @@ public class AdminArticleServiceImpl implements AdminArticleService {
     }
 
     /**
+     * 查询文章分页数据
+     *
+     * @param findArticlePageListReqVO
+     * @return
+     */
+    @Override
+    public Response findArticlePageList(FindArticlePageListReqVO findArticlePageListReqVO) {
+        Long current = findArticlePageListReqVO.getCurrent();
+
+        Long size = findArticlePageListReqVO.getSize();
+        String title = findArticlePageListReqVO.getTitle();
+        LocalDate startDate = findArticlePageListReqVO.getStartDate();
+        LocalDate endDate = findArticlePageListReqVO.getEndDate();
+
+        Page<ArticleDO> articleDOPage = articleMapper.selectPageList(current, size, title, startDate, endDate);
+
+        List<ArticleDO> articleDOS = articleDOPage.getRecords();
+
+        List<FindArticlePageListRspVO> rspVOS = null;
+        //转vo
+        if (!CollectionUtils.isEmpty(articleDOS)) {
+            rspVOS = articleDOS.stream().map(articleDO -> FindArticlePageListRspVO.builder()
+                            .id(articleDO.getId())
+                            .title(articleDO.getTitle())
+                            .cover(articleDO.getCover())
+                            .createTime(articleDO.getCreateTime())
+                            .build())
+                    .collect(Collectors.toList());
+        }
+        return PageResponse.success(articleDOPage, rspVOS);
+    }
+
+    /**
      * 插入标签
+     *
      * @param articleId
      * @param publishTags
      */
     private void insertTags(Long articleId, List<String> publishTags) {
-        List<String> notExistTags = null; 
-        List<String> existedTags  = null;
+        List<String> notExistTags = null;
+        List<String> existedTags = null;
 
         List<TagDO> tagDOS = tagMapper.selectList(null);
 
         if (CollectionUtils.isEmpty(tagDOS)) {
             notExistTags = publishTags;
         } else {
-            
+
             List<String> tagIds = tagDOS.stream().map(tagDO -> String.valueOf(tagDO.getId())).collect(Collectors.toList());
 
             existedTags = publishTags.stream().filter(tagIds::contains).collect(Collectors.toList());
@@ -145,9 +185,9 @@ public class AdminArticleServiceImpl implements AdminArticleService {
             Map<String, Long> tagNameIdMap = tagDOS.stream().collect(Collectors.toMap(tagDO -> tagDO.getName().toLowerCase(), TagDO::getId));
 
             Iterator<String> iterator = notExistTags.iterator();
-            
+
             while (iterator.hasNext()) {
-                String notExistTag  = iterator.next();
+                String notExistTag = iterator.next();
                 if (tagNameIdMap.containsKey(notExistTag.toLowerCase())) {
                     iterator.remove();
                     existedTags.add(String.valueOf(tagNameIdMap.get(notExistTag.toLowerCase())));
@@ -177,7 +217,7 @@ public class AdminArticleServiceImpl implements AdminArticleService {
                         .createTime(LocalDateTime.now())
                         .updateTime(LocalDateTime.now())
                         .build();
-                
+
                 tagMapper.insert(tagDO);
 
                 Long tagId = tagDO.getId();
