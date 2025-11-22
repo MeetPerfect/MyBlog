@@ -35,12 +35,12 @@ public interface AdminTagService {
      * @param deleteTagReqVO
      * @return
      */
-    Response deleteCategory(DeleteTagReqVO deleteTagReqVO);
-//
-//
-//    /**
-//     * 获取文章分类的 Select 列表数据
-//     * @return
-//     */
-//    Response findCategorySelectList();
+    Response deleteTag(DeleteTagReqVO deleteTagReqVO);
+
+
+    /**
+     * 获取文章分类的 Select 列表数据
+     * @return
+     */
+    Response searchTag(SearchTagReqVO searchTagReqVO);
 }

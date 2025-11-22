@@ -46,11 +46,19 @@ public class AdminTagController {
         return tagService.findTagList(findTagPageListReqVO);
     }
 
-    @PostMapping("/category/delete")
+    @PostMapping("/tag/delete")
     @ApiOperation(value = "删除标签")
     @ApiOperationLog(description = "删除标签")
     public Response deleteCategory(@RequestBody @Validated DeleteTagReqVO deleteTagReqVO) {
         return tagService.deleteTag(deleteTagReqVO);
+    }
+
+    @PostMapping("/tag/search")
+    @ApiOperation(value = "标签 Select 下拉列表数据获取")
+    @ApiOperationLog(description = "标签 Select 下拉列表数据获取")
+    public Response searchTag(@RequestBody @Validated SearchTagReqVO searchTagReqVO) {
+        
+        return tagService.searchTag(searchTagReqVO);
     }
     
 }

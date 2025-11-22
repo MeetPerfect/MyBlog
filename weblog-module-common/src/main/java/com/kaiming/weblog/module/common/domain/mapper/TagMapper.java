@@ -6,9 +6,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kaiming.weblog.module.common.domain.dos.CategoryDO;
 import com.kaiming.weblog.module.common.domain.dos.TagDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -43,5 +46,19 @@ public interface TagMapper extends BaseMapper<TagDO> {
                 .orderByDesc(TagDO::getCreateTime);
 
         return selectPage(page, wrapper);
+    }
+
+    /**
+     * 根据关键字模糊查询标签列表
+     * @param key
+     * @return
+     */
+    default List<TagDO> selectByKey(String key) {
+        
+        LambdaQueryWrapper<TagDO> wrapper = new LambdaQueryWrapper<>();
+        
+        wrapper.like(TagDO::getName, key).orderByDesc(TagDO::getCreateTime);
+        
+        return selectList(wrapper);
     }
 }

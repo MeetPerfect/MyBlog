@@ -96,9 +96,32 @@ public class AdminTagServiceImpl extends ServiceImpl<TagMapper, TagDO> implement
      * @return
      */
     @Override
-    public Response deleteCategory(DeleteTagReqVO deleteTagReqVO) {
+    public Response deleteTag(DeleteTagReqVO deleteTagReqVO) {
         Long id = deleteTagReqVO.getId();
         int count = tagMapper.deleteById(id);
         return count == 1 ? Response.success() : Response.fail(ResponseCodeEnum.TAG_NOT_EXISTED);
+    }
+
+    /**
+     * 标签 Select 下拉列表数据获取
+     * @param searchTagReqVO
+     * @return
+     */
+    @Override
+    public Response searchTag(SearchTagReqVO searchTagReqVO) {
+        String key = searchTagReqVO.getKey();
+
+        List<TagDO> tagDOS = tagMapper.selectByKey(key);
+        
+        List<SelectRspVO> vos = null;
+        if (!CollectionUtils.isEmpty(tagDOS)) {
+            vos = tagDOS.stream()
+                    .map(tagDO -> SelectRspVO.builder()
+                            .label(tagDO.getName())
+                            .value(Objects.toString(tagDO.getId()))
+                            .build())
+                    .collect(Collectors.toList());
+        }
+        return Response.success(vos);
     }
 }
