@@ -4,6 +4,8 @@ import com.kaiming.weblog.module.common.domain.dos.ArticleDO;
 import com.kaiming.weblog.web.model.vo.FindArchiveArticleRspVO;
 import com.kaiming.weblog.web.model.vo.FindCategoryArticlePageListRspVO;
 import com.kaiming.weblog.web.model.vo.FindIndexArticlePageListRspVO;
+import com.kaiming.weblog.web.model.vo.FindTagArticlePageListRspVO;
+import org.checkerframework.checker.units.qual.A;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -49,4 +51,13 @@ public interface ArticleConvert {
      */
     @Mapping(target = "createDate", expression = "java(java.time.LocalDate.from(bean.getCreateTime()))")
     FindCategoryArticlePageListRspVO convertDO2CategoryArticleVO(ArticleDO bean);
+
+
+    /**
+     * 将 DO 转换成标签文章 VO
+     * @param bean
+     * @return
+     */
+    @Mapping(target = "createDate", expression = "java(java.time.LocalDate.from(bean.getCreateTime()))")
+    FindTagArticlePageListRspVO convertDO2TagArticleVO(ArticleDO bean);
 }

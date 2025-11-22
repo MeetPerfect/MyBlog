@@ -64,4 +64,14 @@ public interface ArticleTagRelMapper extends InsertBatchMapper<ArticleTagRelDO> 
         return selectList(Wrappers.<ArticleTagRelDO>lambdaQuery()
                 .in(ArticleTagRelDO::getArticleId, articleIds));
     }
+
+    /**
+     * 根据标签ID查询文章标签关联列表
+     * @param tagId
+     * @return
+     */
+    default List<ArticleTagRelDO> selectByTagId(Long tagId) {
+        return selectList(Wrappers.<ArticleTagRelDO>lambdaQuery()
+                .eq(ArticleTagRelDO::getTagId, tagId));
+    }
 }
