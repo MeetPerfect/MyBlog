@@ -5,6 +5,7 @@ import com.kaiming.weblog.module.common.domain.mapper.ArticleMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,6 +25,7 @@ public class ReadArticleSubscriber implements ApplicationListener<ReadArticleEve
     private ArticleMapper articleMapper;
     
     @Override
+    @Async("threadPoolTaskExecutor")
     public void onApplicationEvent(ReadArticleEvent event) {
         Long articleId = event.getArticleId();
 
