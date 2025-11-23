@@ -3,6 +3,7 @@ package com.kaiming.weblog.web.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
+import com.kaiming.weblog.module.admin.event.ReadArticleEvent;
 import com.kaiming.weblog.module.common.domain.dos.*;
 import com.kaiming.weblog.module.common.domain.mapper.*;
 import com.kaiming.weblog.module.common.enums.ResponseCodeEnum;
@@ -14,6 +15,8 @@ import com.kaiming.weblog.web.model.vo.*;
 import com.kaiming.weblog.web.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -47,6 +50,8 @@ public class ArticleServiceImpl implements ArticleService {
     private TagMapper tagMapper;
     @Autowired
     private ArticleContentMapper articleContentMapper;
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public Response findArticlePageList(FindIndexArticlePageListReqVO findIndexArticlePageListReqVO) {
@@ -191,6 +196,8 @@ public class ArticleServiceImpl implements ArticleService {
                     .build();
             articleDetailRspVO.setNextArticle(nextArticleVO);
         }
+
+        applicationEventPublisher.publishEvent(new ReadArticleEvent(this, articleId));
 
         return Response.success(articleDetailRspVO);
     }
