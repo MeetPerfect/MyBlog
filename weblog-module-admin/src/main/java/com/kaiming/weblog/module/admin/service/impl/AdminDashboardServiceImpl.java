@@ -1,13 +1,18 @@
 package com.kaiming.weblog.module.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.kaiming.weblog.module.admin.model.vo.FindDashboardPVStatisticsInfoRspVO;
 import com.kaiming.weblog.module.admin.model.vo.FindDashboardStatisticsInfoRspVO;
 import com.kaiming.weblog.module.admin.service.AdminDashboardService;
+import com.kaiming.weblog.module.common.constant.Constants;
 import com.kaiming.weblog.module.common.domain.dos.ArticleDO;
 import com.kaiming.weblog.module.common.domain.dos.ArticlePublishCountDO;
+import com.kaiming.weblog.module.common.domain.dos.StatisticsArticlePVDO;
 import com.kaiming.weblog.module.common.domain.mapper.ArticleMapper;
 import com.kaiming.weblog.module.common.domain.mapper.CategoryMapper;
+import com.kaiming.weblog.module.common.domain.mapper.StatisticsArticlePVMapper;
 import com.kaiming.weblog.module.common.domain.mapper.TagMapper;
 import com.kaiming.weblog.module.common.utils.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +46,8 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
     private CategoryMapper categoryMapper;
     @Autowired
     private TagMapper tagMapper;
+    @Autowired
+    private StatisticsArticlePVMapper statisticsArticlePVMapper;
     
     
     @Override
@@ -102,5 +109,38 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
         }
         
         return Response.success(map);
+    }
+
+    @Override
+    public Response findDashboardPVStatistics() {
+
+        List<StatisticsArticlePVDO> statisticsArticlePVDOS = statisticsArticlePVMapper.selectLatestWeekRecords();
+
+        Map<LocalDate, Long> pvDateCountMap = Maps.newHashMap();
+
+        if (!CollectionUtils.isEmpty(statisticsArticlePVDOS)) {
+            // 转 Map, 方便后续通过日期获取 PV 访问量
+            pvDateCountMap = statisticsArticlePVDOS.stream()
+                    .collect(Collectors.toMap(StatisticsArticlePVDO::getPvDate, StatisticsArticlePVDO::getPvCount));
+        }
+        FindDashboardPVStatisticsInfoRspVO vo = null;
+
+        // 日期集合
+        List<String> pvDates = Lists.newArrayList();
+        // PV 集合
+        List<Long> pvCounts = Lists.newArrayList();
+
+        LocalDate curr = LocalDate.now();
+        LocalDate startDate = curr.minusWeeks(1);
+
+        // 从一周前开始循环
+        for (; startDate.isBefore(curr) || startDate.isEqual(curr); startDate = startDate.plusDays(1)) {
+            // 设置对应日期的 PV 访问量
+            pvDates.add(startDate.format(Constants.MONTH_DAY_FORMATTER));
+            Long pvCount = pvDateCountMap.get(startDate);
+            pvCounts.add(Objects.isNull(pvCount) ? 0 : pvCount);
+        }
+
+        return Response.success(vo);
     }
 }
