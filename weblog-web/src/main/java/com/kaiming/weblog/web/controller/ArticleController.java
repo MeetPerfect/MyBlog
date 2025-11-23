@@ -2,6 +2,7 @@ package com.kaiming.weblog.web.controller;
 
 import com.kaiming.weblog.module.common.aspect.ApiOperationLog;
 import com.kaiming.weblog.module.common.utils.Response;
+import com.kaiming.weblog.web.model.vo.FindArticleDetailReqVO;
 import com.kaiming.weblog.web.model.vo.FindIndexArticlePageListReqVO;
 import com.kaiming.weblog.web.service.ArticleService;
 import io.swagger.annotations.Api;
@@ -32,5 +33,12 @@ public class ArticleController {
     @ApiOperationLog(description = "获取首页文章分页数据")
     public Response findArticlePageList(@RequestBody FindIndexArticlePageListReqVO findIndexArticlePageListReqVO) {
         return articleService.findArticlePageList(findIndexArticlePageListReqVO);
+    }
+
+    @PostMapping("/detail")
+    @ApiOperation(value = "获取文章详情")
+    @ApiOperationLog(description = "获取文章详情")
+    public Response findArticleDetail(@RequestBody FindArticleDetailReqVO findArticleDetailReqVO) {
+        return articleService.findArticleDetail(findArticleDetailReqVO);
     }
 }

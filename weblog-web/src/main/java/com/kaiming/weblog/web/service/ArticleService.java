@@ -1,6 +1,7 @@
 package com.kaiming.weblog.web.service;
 
 import com.kaiming.weblog.module.common.utils.Response;
+import com.kaiming.weblog.web.model.vo.FindArticleDetailReqVO;
 import com.kaiming.weblog.web.model.vo.FindIndexArticlePageListReqVO;
 
 /**
@@ -20,4 +21,12 @@ public interface ArticleService {
      * @return
      */
     Response findArticlePageList(FindIndexArticlePageListReqVO findIndexArticlePageListReqVO);
+    
+    
+    /**
+     * 获取文章详情
+     * @param findArticleDetailReqVO
+     * @return
+     */
+    Response findArticleDetail(FindArticleDetailReqVO findArticleDetailReqVO);
 }

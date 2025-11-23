@@ -5,14 +5,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.kaiming.weblog.module.common.domain.dos.*;
 import com.kaiming.weblog.module.common.domain.mapper.*;
+import com.kaiming.weblog.module.common.enums.ResponseCodeEnum;
+import com.kaiming.weblog.module.common.exception.BizException;
 import com.kaiming.weblog.module.common.utils.PageResponse;
 import com.kaiming.weblog.module.common.utils.Response;
 import com.kaiming.weblog.web.convert.ArticleConvert;
-import com.kaiming.weblog.web.model.vo.FindCategoryListRspVO;
-import com.kaiming.weblog.web.model.vo.FindIndexArticlePageListReqVO;
-import com.kaiming.weblog.web.model.vo.FindIndexArticlePageListRspVO;
-import com.kaiming.weblog.web.model.vo.FindTagListRspVO;
+import com.kaiming.weblog.web.model.vo.*;
 import com.kaiming.weblog.web.service.ArticleService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
  * @Version 1.0
  */
 @Service
+@Slf4j
 public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleMapper articleMapper;
@@ -44,6 +45,8 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleTagRelMapper articleTagRelMapper;
     @Autowired
     private TagMapper tagMapper;
+    @Autowired
+    private ArticleContentMapper articleContentMapper;
 
     @Override
     public Response findArticlePageList(FindIndexArticlePageListReqVO findIndexArticlePageListReqVO) {
@@ -128,5 +131,67 @@ public class ArticleServiceImpl implements ArticleService {
 
 
         return PageResponse.success(articleDOPage, vos);
+    }
+
+
+    @Override
+    public Response findArticleDetail(FindArticleDetailReqVO findArticleDetailReqVO) {
+        Long articleId = findArticleDetailReqVO.getArticleId();
+
+        ArticleDO articleDO = articleMapper.selectById(articleId);
+
+        if (Objects.isNull(articleDO)) {
+            log.warn("==> 该文章不存在, articleId: {}", articleId);
+            throw new BizException(ResponseCodeEnum.ARTICLE_NOT_FOUND);
+        }
+
+        ArticleContentDO articleContentDO = articleContentMapper.selectArticleId(articleId);
+
+        FindArticleDetailRspVO articleDetailRspVO = FindArticleDetailRspVO.builder()
+                .title(articleDO.getTitle())
+                .createTime(articleDO.getCreateTime())
+                .readNum(articleDO.getReadNum())
+                .content(articleContentDO.getContent())
+                .build();
+
+        ArticleCategoryRelDO articleCategoryRelDO = articleCategoryRelMapper.selectById(articleId);
+        CategoryDO categoryDO = categoryMapper.selectById(articleCategoryRelDO.getCategoryId());
+        articleDetailRspVO.setCategoryId(categoryDO.getId());
+        articleDetailRspVO.setCategoryName(categoryDO.getName());
+
+        List<ArticleTagRelDO> articleTagRelDOS = articleTagRelMapper.selectByTagId(articleId);
+        List<Long> tagIds = articleTagRelDOS.stream()
+                .map(ArticleTagRelDO::getId).collect(Collectors.toList());
+
+        List<TagDO> tagDOS = tagMapper.selectByIds(tagIds);
+
+        // 标签 DO 转 VO
+        List<FindTagListRspVO> tagVOS = tagDOS.stream()
+                .map(tagDO -> FindTagListRspVO.builder().id(tagDO.getId()).name(tagDO.getName()).build())
+                .collect(Collectors.toList());
+        articleDetailRspVO.setTags(tagVOS);
+
+        // 上一篇文章
+        ArticleDO preArticleDO = articleMapper.selectPreArticle(articleId);
+
+        if (Objects.nonNull(preArticleDO)) {
+            FindPreNextArticleRspVO preArticleVO = FindPreNextArticleRspVO.builder()
+                    .articleId(preArticleDO.getId())
+                    .articleTitle(preArticleDO.getTitle())
+                    .build();
+            articleDetailRspVO.setPreArticle(preArticleVO);
+        }
+
+        // 下一篇
+        ArticleDO nextArticleDO = articleMapper.selectNextArticle(articleId);
+        if (Objects.nonNull(nextArticleDO)) {
+            FindPreNextArticleRspVO nextArticleVO = FindPreNextArticleRspVO.builder()
+                    .articleId(nextArticleDO.getId())
+                    .articleTitle(nextArticleDO.getTitle())
+                    .build();
+            articleDetailRspVO.setNextArticle(nextArticleVO);
+        }
+
+        return Response.success(articleDetailRspVO);
     }
 }

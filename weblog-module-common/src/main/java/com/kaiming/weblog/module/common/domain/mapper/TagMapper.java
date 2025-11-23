@@ -46,15 +46,28 @@ public interface TagMapper extends BaseMapper<TagDO> {
 
     /**
      * 根据关键字模糊查询标签列表
+     *
      * @param key
      * @return
      */
     default List<TagDO> selectByKey(String key) {
-        
+
         LambdaQueryWrapper<TagDO> wrapper = new LambdaQueryWrapper<>();
-        
+
         wrapper.like(TagDO::getName, key).orderByDesc(TagDO::getCreateTime);
-        
+
+        return selectList(wrapper);
+    }
+
+    /**
+     * 根据标签ID列表查询标签列表
+     *
+     * @param tagIds
+     * @return
+     */
+    default List<TagDO> selectByIds(List<Long> tagIds) {
+        LambdaQueryWrapper<TagDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(TagDO::getId, tagIds);
         return selectList(wrapper);
     }
 }
