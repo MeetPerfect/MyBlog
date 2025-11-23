@@ -159,14 +159,14 @@ public class ArticleServiceImpl implements ArticleService {
                 .content(articleContentDO.getContent())
                 .build();
 
-        ArticleCategoryRelDO articleCategoryRelDO = articleCategoryRelMapper.selectById(articleId);
+        ArticleCategoryRelDO articleCategoryRelDO = articleCategoryRelMapper.selectByArticleId(articleId);
         CategoryDO categoryDO = categoryMapper.selectById(articleCategoryRelDO.getCategoryId());
         articleDetailRspVO.setCategoryId(categoryDO.getId());
         articleDetailRspVO.setCategoryName(categoryDO.getName());
 
-        List<ArticleTagRelDO> articleTagRelDOS = articleTagRelMapper.selectByTagId(articleId);
+        List<ArticleTagRelDO> articleTagRelDOS = articleTagRelMapper.selectByArticleId(articleId);
         List<Long> tagIds = articleTagRelDOS.stream()
-                .map(ArticleTagRelDO::getId).collect(Collectors.toList());
+                .map(ArticleTagRelDO::getTagId).collect(Collectors.toList());
 
         List<TagDO> tagDOS = tagMapper.selectByIds(tagIds);
 

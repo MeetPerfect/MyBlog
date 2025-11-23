@@ -22,7 +22,7 @@ spring:
       password: 123456
       
 minio:
-  endpoint: http://192.168.20.101:9000
-  accessKey: quanxiaoha
-  secretKey: quanxiaoha
+  endpoint: http://39.96.162.218:9000
+  accessKey: gongkaiming
+  secretKey: gongkaiming
   bucketName: weblog

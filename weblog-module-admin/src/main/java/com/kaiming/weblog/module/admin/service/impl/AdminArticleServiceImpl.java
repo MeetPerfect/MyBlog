@@ -74,7 +74,7 @@ public class AdminArticleServiceImpl implements AdminArticleService {
         Long articleId = articleDO.getId();
 
         ArticleContentDO articleContentDO = ArticleContentDO.builder()
-                .id(articleId)
+                .articleId(articleId)
                 .content(publishArticleReqVO.getContent())
                 .build();
         articleContentMapper.insert(articleContentDO);

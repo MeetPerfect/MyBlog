@@ -2,6 +2,7 @@ package com.kaiming.weblog.module.common.domain.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kaiming.weblog.module.common.domain.dos.TagDO;
 import org.apache.ibatis.annotations.Mapper;
@@ -66,8 +67,7 @@ public interface TagMapper extends BaseMapper<TagDO> {
      * @return
      */
     default List<TagDO> selectByIds(List<Long> tagIds) {
-        LambdaQueryWrapper<TagDO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.in(TagDO::getId, tagIds);
-        return selectList(wrapper);
+        return selectList(Wrappers.<TagDO>lambdaQuery()
+                .in(TagDO::getId, tagIds));
     }
 }
