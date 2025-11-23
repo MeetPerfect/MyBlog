@@ -1,9 +1,11 @@
 package com.kaiming.weblog.module.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.google.common.collect.Maps;
 import com.kaiming.weblog.module.admin.model.vo.FindDashboardStatisticsInfoRspVO;
 import com.kaiming.weblog.module.admin.service.AdminDashboardService;
 import com.kaiming.weblog.module.common.domain.dos.ArticleDO;
+import com.kaiming.weblog.module.common.domain.dos.ArticlePublishCountDO;
 import com.kaiming.weblog.module.common.domain.mapper.ArticleMapper;
 import com.kaiming.weblog.module.common.domain.mapper.CategoryMapper;
 import com.kaiming.weblog.module.common.domain.mapper.TagMapper;
@@ -13,7 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * ClassName: AdminDashboardServiceImpl
@@ -67,5 +74,33 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
                 .build();
         
         return Response.success(vo);
+    }
+
+    
+    @Override
+    public Response findDashboardPublishArticleStatistics() {
+        LocalDate current = LocalDate.now();
+        LocalDate startDate = current.minusYears(1);
+
+        List<ArticlePublishCountDO> articlePublishCountDOS = articleMapper.selectDateArticlePublishCount(startDate, current);
+
+        Map<LocalDate, Long> map = null;
+
+        if (!CollectionUtils.isEmpty(articlePublishCountDOS)) {
+            Map<LocalDate, Long> dateArticleCountMap = articlePublishCountDOS.stream()
+                    .collect(Collectors.toMap(ArticlePublishCountDO::getDate, ArticlePublishCountDO::getCount));
+
+            map = Maps.newHashMap();
+
+            // 从上一年的今天循环到今天
+            for (; startDate.isBefore(current) || startDate.isEqual(current); startDate = startDate.plusDays(1)) {
+                // 以日期作为 key 从 dateArticleCountMap 中取文章发布总量
+                Long count = dateArticleCountMap.get(startDate);
+                // 设置到返参 Map
+                map.put(startDate, Objects.isNull(count) ? 0 : count);
+            }
+        }
+        
+        return Response.success(map);
     }
 }
