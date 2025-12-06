@@ -27,6 +27,7 @@
         <module>weblog-module-common</module>
         <!-- JWT 模块 -->
         <module>weblog-module-jwt</module>
+        <module>weblog-module-search</module>
     </modules>
     
     
@@ -53,11 +54,18 @@
         <minio.version>8.2.1</minio.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <commonmark.version>0.20.0</commonmark.version>
+        <lucene.version>8.11.1</lucene.version>
     </properties>
 
     <!-- 统一依赖管理 -->
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.quanxiaoha</groupId>
+                <artifactId>weblog-module-search</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            
             <dependency>
                 <groupId>com.kaiming</groupId>
                 <artifactId>weblog-module-admin</artifactId>
@@ -171,6 +179,33 @@
                 <groupId>org.commonmark</groupId>
                 <artifactId>commonmark-ext-task-list-items</artifactId>
                 <version>${commonmark.version}</version>
+            </dependency>
+            <!-- lucene 全文检索引擎 -->
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-core</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+
+            <!-- 中文分词 -->
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-analyzers-smartcn</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+
+            <!-- 关键词高亮 -->
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-highlighter</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+
+            <!-- 查询解析器 -->
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-queryparser</artifactId>
+                <version>${lucene.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
