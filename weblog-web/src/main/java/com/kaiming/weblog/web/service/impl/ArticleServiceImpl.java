@@ -13,6 +13,7 @@ import com.kaiming.weblog.module.common.utils.Response;
 import com.kaiming.weblog.web.convert.ArticleConvert;
 import com.kaiming.weblog.web.model.vo.*;
 import com.kaiming.weblog.web.service.ArticleService;
+import com.kaiming.weblog.web.utils.MarkdownStatusUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -130,7 +131,7 @@ public class ArticleServiceImpl implements ArticleService {
                             .build();
                     findTagListRspVOS.add(findTagListRspVO);
                 });
-                
+
             });
         }
 
@@ -151,12 +152,17 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
         ArticleContentDO articleContentDO = articleContentMapper.selectArticleId(articleId);
+        String content = articleContentDO.getContent();
+        // 计算 md 正文字数
+        int totalWords = MarkdownStatusUtil.calculateWordCount(content);
 
         FindArticleDetailRspVO articleDetailRspVO = FindArticleDetailRspVO.builder()
                 .title(articleDO.getTitle())
                 .createTime(articleDO.getCreateTime())
                 .readNum(articleDO.getReadNum())
                 .content(articleContentDO.getContent())
+                .totalWords(totalWords)
+                .readTime(MarkdownStatusUtil.calculateReadingTime(totalWords))
                 .build();
 
         ArticleCategoryRelDO articleCategoryRelDO = articleCategoryRelMapper.selectByArticleId(articleId);
