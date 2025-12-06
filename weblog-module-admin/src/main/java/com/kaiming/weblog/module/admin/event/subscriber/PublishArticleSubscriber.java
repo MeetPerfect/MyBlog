@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 /**
  * ClassName: PublishArticleSubscriber
@@ -28,7 +30,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class PublishArticleSubscriber implements ApplicationListener<PublishArticleEvent> {
+public class PublishArticleSubscriber {
 
     @Autowired
     private LuceneHelper luceneHelper;
@@ -38,8 +40,7 @@ public class PublishArticleSubscriber implements ApplicationListener<PublishArti
     private ArticleContentMapper articleContentMapper;
 
 
-    @Override
-    @Async("threadPoolTaskExecutor")
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT) // 使用 AFTER_COMMIT 确保事务提交后执行
     public void onApplicationEvent(PublishArticleEvent event) {
         // 在这里处理收到的事件，可以是任何逻辑操作
         Long articleId = event.getArticleId();
