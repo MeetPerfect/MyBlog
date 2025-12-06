@@ -37,4 +37,6 @@ public class TagDO {
     private LocalDateTime updateTime;
 
     private Boolean isDeleted;
+
+    private Integer articlesTotal;
 }

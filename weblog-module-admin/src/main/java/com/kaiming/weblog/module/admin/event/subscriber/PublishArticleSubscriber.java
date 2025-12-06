@@ -76,6 +76,11 @@ public class PublishArticleSubscriber {
         statisticsService.statisticsCategoryArticleTotal();
         log.info("==> 重新统计各分类下文章总数");
 
+        // 重新统计各标签下文章总数
+        statisticsService.statisticsTagArticleTotal();
+        log.info("==> 重新统计各标签下文章总数");
+
+
         log.info("==> 添加文章对应 Lucene 文档结束，articleId: {}，受影响行数: {}", articleId, count);
     }
 }
