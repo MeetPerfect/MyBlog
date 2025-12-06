@@ -59,9 +59,9 @@ public class SearchServiceImpl implements SearchService {
         // 想要搜索的文档字段（这里指定对文章标题、摘要进行检索，任何一个字段包含该关键词，都会被搜索到）
         String[] columns = {ArticleIndex.COLUMN_TITLE, ArticleIndex.COLUMN_SUMMARY};
 
-        long total = luceneHelper.searchTotal(articleIndexDir, word, columns);
+        long total = luceneHelper.searchTotal(ArticleIndex.NAME, word, columns);
 
-        List<Document> documents = luceneHelper.search(articleIndexDir, word, columns, current, size);
+        List<Document> documents = luceneHelper.search(ArticleIndex.NAME, word, columns, current, size);
         // 若未查询到相关文档，只接 return
         
         if (CollectionUtils.isEmpty(documents)) {

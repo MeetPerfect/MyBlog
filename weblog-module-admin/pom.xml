@@ -15,6 +15,10 @@
     <dependencies>
         <dependency>
             <groupId>com.kaiming</groupId>
+            <artifactId>weblog-module-search</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.kaiming</groupId>
             <artifactId>weblog-module-jwt</artifactId>
         </dependency>
         <dependency>
