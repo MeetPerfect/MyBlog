@@ -2,6 +2,7 @@ package com.kaiming.weblog.web.markdown;
 
 import com.kaiming.weblog.web.markdown.provider.NofollowLinkAttributeProvider;
 import com.kaiming.weblog.web.markdown.renderer.ImageNodeRenderer;
+import com.kaiming.weblog.web.markdown.renderer.LinkNodeRenderer;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.commonmark.ext.heading.anchor.HeadingAnchorExtension;
@@ -47,6 +48,8 @@ public class MarkDownHelper {
         PARSER = Parser.builder().extensions(extensions).build();
         HTML_RENDERER = HtmlRenderer.builder()
                 .extensions(extensions)
+                .nodeRendererFactory(ImageNodeRenderer::new)
+                .nodeRendererFactory(LinkNodeRenderer::new)
                 .attributeProviderFactory(context -> new NofollowLinkAttributeProvider())
                 .nodeRendererFactory(ImageNodeRenderer::new)
                 .build();
