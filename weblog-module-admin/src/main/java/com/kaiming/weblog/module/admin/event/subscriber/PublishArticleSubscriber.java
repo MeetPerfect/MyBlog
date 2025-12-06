@@ -1,6 +1,7 @@
 package com.kaiming.weblog.module.admin.event.subscriber;
 
 import com.kaiming.weblog.module.admin.event.PublishArticleEvent;
+import com.kaiming.weblog.module.admin.service.AdminStatisticsService;
 import com.kaiming.weblog.module.common.constant.Constants;
 import com.kaiming.weblog.module.common.domain.dos.ArticleContentDO;
 import com.kaiming.weblog.module.common.domain.dos.ArticleDO;
@@ -38,6 +39,8 @@ public class PublishArticleSubscriber {
     private ArticleMapper articleMapper;
     @Autowired
     private ArticleContentMapper articleContentMapper;
+    @Autowired
+    private AdminStatisticsService statisticsService;
 
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT) // 使用 AFTER_COMMIT 确保事务提交后执行
@@ -68,6 +71,10 @@ public class PublishArticleSubscriber {
 
         // 添加文档
         long count = luceneHelper.addDocument(ArticleIndex.NAME, document);
+
+        // 重新统计各分类下文章总数
+        statisticsService.statisticsCategoryArticleTotal();
+        log.info("==> 重新统计各分类下文章总数");
 
         log.info("==> 添加文章对应 Lucene 文档结束，articleId: {}，受影响行数: {}", articleId, count);
     }

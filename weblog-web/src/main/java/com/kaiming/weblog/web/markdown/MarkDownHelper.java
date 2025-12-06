@@ -50,8 +50,8 @@ public class MarkDownHelper {
                 .extensions(extensions)
                 .nodeRendererFactory(ImageNodeRenderer::new)
                 .nodeRendererFactory(LinkNodeRenderer::new)
-                .attributeProviderFactory(context -> new NofollowLinkAttributeProvider())
-                .nodeRendererFactory(ImageNodeRenderer::new)
+//                .attributeProviderFactory(context -> new NofollowLinkAttributeProvider())
+//                .nodeRendererFactory(ImageNodeRenderer::new)
                 .build();
     }
 
