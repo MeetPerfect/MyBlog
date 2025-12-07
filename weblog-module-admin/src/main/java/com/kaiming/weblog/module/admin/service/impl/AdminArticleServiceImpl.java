@@ -166,7 +166,6 @@ public class AdminArticleServiceImpl implements AdminArticleService {
                             .title(articleDO.getTitle())
                             .cover(articleDO.getCover())
                             .createTime(articleDO.getCreateTime())
-                            .isTop(articleDO.getWeight() > 0)
                             .build())
                     .collect(Collectors.toList());
         }
