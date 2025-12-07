@@ -1,6 +1,7 @@
 package com.kaiming.weblog.module.admin.controller;
 
 import com.kaiming.weblog.module.admin.model.vo.AddWikiReqVO;
+import com.kaiming.weblog.module.admin.model.vo.DeleteWikiReqVO;
 import com.kaiming.weblog.module.admin.service.AdminWikiService;
 import com.kaiming.weblog.module.common.aspect.ApiOperationLog;
 import com.kaiming.weblog.module.common.utils.Response;
@@ -37,5 +38,13 @@ public class AdminWikiController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Response addWiki(@RequestBody @Validated AddWikiReqVO addWikiReqVO) {
         return wikiService.addWiki(addWikiReqVO);
+    }
+
+    @PostMapping("/delete")
+    @ApiOperation(value = "知识库删除")
+    @ApiOperationLog(description = "知识库删除")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Response deleteWiki(@RequestBody @Validated DeleteWikiReqVO deleteWikiReqVO) {
+        return wikiService.deleteWiki(deleteWikiReqVO);
     }
 }
