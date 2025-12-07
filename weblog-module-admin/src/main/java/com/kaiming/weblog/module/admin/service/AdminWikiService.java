@@ -1,6 +1,7 @@
 package com.kaiming.weblog.module.admin.service;
 
 import com.kaiming.weblog.module.admin.model.vo.AddWikiReqVO;
+import com.kaiming.weblog.module.admin.model.vo.DeleteWikiReqVO;
 import com.kaiming.weblog.module.common.utils.Response;
 
 /**
@@ -20,4 +21,11 @@ public interface AdminWikiService {
      * @return
      */
     Response addWiki(AddWikiReqVO addWikiReqVO);
+
+    /**
+     * 删除知识库
+     * @param deleteWikiReqVO
+     * @return
+     */
+    Response deleteWiki(DeleteWikiReqVO deleteWikiReqVO);
 }
